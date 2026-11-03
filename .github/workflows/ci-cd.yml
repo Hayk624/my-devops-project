@@ -71,8 +71,7 @@ jobs:
             fi
 
             echo "Green deployment: $CANDIDATE_URL"
-            vercel inspect "$CANDIDATE_URL" --wait --timeout=5m \
-              --project "$VERCEL_PROJECT_ID"
+            vercel inspect "$CANDIDATE_URL" --wait --timeout=5m
 
             # Check Green before switching the production domain.
             if ! ./scripts/healthcheck.sh "$CANDIDATE_URL" logs/health.log; then
@@ -81,15 +80,13 @@ jobs:
             fi
 
             echo "Promoting Green to production"
-            vercel promote "$CANDIDATE_URL" --yes \
-              --project "$VERCEL_PROJECT_ID"
+            vercel promote "$CANDIDATE_URL" --yes
 
             # Verify the promoted deployment through the public domain.
             if ! ./scripts/healthcheck.sh "https://$VERCEL_DOMAIN" logs/health.log; then
               echo "Production healthcheck failed; rolling back to Blue"
               if [ -n "$OLD_DEPLOYMENT_URL" ]; then
-                vercel rollback "https://$OLD_DEPLOYMENT_URL" --yes \
-                  --project "$VERCEL_PROJECT_ID"
+                vercel rollback "https://$OLD_DEPLOYMENT_URL" --yes
               fi
               exit 1
             fi
