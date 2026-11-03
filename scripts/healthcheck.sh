@@ -4,7 +4,7 @@ LOG="${2:-logs/health.log}"
 mkdir -p "$(dirname "$LOG")"
 
 CODE=000
-for ATTEMPT in 1 2 3 4 5; do
+for ATTEMPT in 1 2 3 4 5 6 7 8 9 10; do
   CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 "$URL" || echo 000)
   [ "$CODE" = "200" ] && break
   [ "$ATTEMPT" -lt 5 ] && sleep 3
